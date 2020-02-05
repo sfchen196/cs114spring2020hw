@@ -1,0 +1,136 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{multirow}
+
+\begin{document}
+
+\title{CS114 (Spring 2020) Written Assignment 1\\Text Classification}
+\author{Due February 14, 2020}
+\date{}
+\maketitle
+
+\section{Na\"ive Bayes}
+
+The following problem is from the Jurafsky and Martin book, Exercise 4.2, reproduced below.\\
+
+\noindent Given the following short movie reviews, each labeled with a genre, either comedy or action:
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline 
+document & class \\ 
+\hline 
+fly fast shoot love & action \\ 
+\hline 
+fun couple love love & comedy \\ 
+\hline 
+fast furious shoot & action \\ 
+\hline 
+couple fly fast fun fun & comedy \\ 
+\hline 
+furious shoot shoot fun & action \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\noindent and a new document D:\\
+
+fast couple shoot fly\\
+
+\noindent compute the most likely class for D. Assume a naive Bayes classifier and use add-1 smoothing for the likelihoods.\\
+
+\noindent Note: \textbf{Show your work!} In particular, show all of the probability distributions involved in the model (namely, $P(\mathrm{class})$ and $P(\mathrm{feature|class})$) and all of the steps used to calculate them. It is recommended that you create (conditional) probability tables such as those shown below.\newpage
+
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline 
+class & $P(\mathrm{class})$ \\ 
+\hline 
+comedy &  \\ 
+\hline 
+action &  \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline 
+\multicolumn{2}{|c|}{\multirow{2}{*}{$P(\mathrm{feature|class})$}} & \multicolumn{2}{|c|}{class} \\ 
+\cline{3-4}
+\multicolumn{2}{|c|}{} & comedy & action \\ 
+\hline 
+\multirow{4}{*}{feature} & fly &  &  \\ 
+\cline{2-4}
+& fast &  &  \\ 
+\cline{2-4}
+& shoot &  &  \\ 
+\cline{2-4}
+& love &  &  \\ 
+\hline
+\end{tabular} 
+\end{center}
+
+\section{Logistic Regression}
+
+(You may find the discussion in Chapter 5 of the Jurafsky and Martin book helpful.)\\
+
+\noindent Next, we will train a logistic regression classifier, using the same five training examples as before. We will use the word counts of ``fast", ``couple", ``shoot", and ``fly" as our features $x_\mathrm{fast}$, $x_\mathrm{couple}$, $x_\mathrm{shoot}$, and $x_\mathrm{fly}$, respectively, but we will not do any smoothing. Suppose also that we map the class ``comedy" to $y=1$ and the class ``action" to $y=0$. Finally, we will initialize our feature weights and bias term to 0: $w_\mathrm{fast}=w_\mathrm{couple}=w_\mathrm{shoot}=w_\mathrm{fly}=b=0$.\\
+
+\noindent We will train our classifier using gradient descent. We divide our training data into two mini-batches: the first three examples in the first batch, and the last two in the second batch.
+
+\begin{enumerate}
+\item Process the first mini-batch.
+\begin{enumerate}
+\item First, compute the gradient for each example in the mini-batch.
+\begin{align*}
+\nabla &= \begin{bmatrix}
+\dfrac{\partial L}{\partial w_\mathrm{fast}} \\[11pt]
+\dfrac{\partial L}{\partial w_\mathrm{couple}} \\[11pt]
+\dfrac{\partial L}{\partial w_\mathrm{shoot}} \\[11pt]
+\dfrac{\partial L}{\partial w_\mathrm{fly}} \\[11pt]
+\dfrac{\partial L}{\partial b}
+\end{bmatrix} = \begin{bmatrix}
+\vdots \\[11pt]
+\vdots \\[11pt]
+\vdots \\[11pt]
+\vdots \\[11pt]
+\vdots
+\end{bmatrix}
+\end{align*}
+
+Then, compute the overall gradient. We will follow Jurafsky and Martin, and say that the mini-batch gradient is the average of the individual gradients.
+\item Update the weight vector. Use a constant learning rate $\eta=0.1$.
+\begin{align*}
+\theta &= \begin{bmatrix}
+w_\mathrm{fast} \\[7pt]
+w_\mathrm{couple} \\[7pt]
+w_\mathrm{shoot} \\[7pt]
+w_\mathrm{fly} \\[7pt]
+b
+\end{bmatrix} = \begin{bmatrix}
+\vdots \\
+\vdots \\
+\vdots \\
+\vdots \\
+\vdots
+\end{bmatrix}
+\end{align*}
+
+\end{enumerate}
+\item Next, process the second mini-batch. Compute the gradient and update the weight vector as before, using the weights and bias you learned in step 1.
+\item Suppose we stop training here (i.e., after one epoch). You are given the same document D as before:\\
+
+\hspace{22pt}fast couple shoot fly\\
+
+Compute the probability that D has the class ``comedy".
+\end{enumerate}
+
+\noindent Reminder: \textbf{Show your work!}
+
+\section*{Submission Instructions}
+
+Please submit your solutions (in PDF format) to LATTE.
+
+\end{document}
