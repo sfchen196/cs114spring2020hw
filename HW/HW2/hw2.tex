@@ -1,0 +1,213 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage{amsmath}
+\usepackage{multirow}
+
+\begin{document}
+
+\title{CS114 (Spring 2020) Written Assignment 2\\Language Modeling and Sequence Labeling}
+\author{Due March 10, 2020}
+\date{}
+\maketitle
+
+\section{N-grams}
+
+You are given the following short sentences:\\
+
+\texttt{Alice admired Dorothy}
+
+\texttt{Dorothy admired every dwarf}
+
+\texttt{Dorothy cheered}
+
+\texttt{every dwarf cheered}
+
+\begin{enumerate}
+
+\item Train the following n-gram language models on the above data:
+
+\begin{enumerate}
+
+\item Unigram, unsmoothed
+
+\item Bigram, unsmoothed
+
+\item Bigram, add-1 smoothing
+
+\item Bigram, interpolation ($\lambda_1=\lambda_2=1/2$)
+
+\end{enumerate}
+
+Some notes:
+
+\begin{itemize}
+
+\item As in HW1, it is recommended that you create (conditional) probability tables such as those shown below for a unigram model:
+\begin{center}
+\hspace*{-46pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline 
+$w_n$ & \texttt{Alice} & \texttt{admired} & \texttt{Dorothy} & \texttt{every} & \texttt{dwarf} & \texttt{cheered} & \texttt{</S>} & \texttt{<UNK>} \\ 
+\hline 
+$P(w_n)$ & • & • & • & • & • & • & • & • \\ 
+\hline 
+\end{tabular}
+\end{center} \newpage
+
+And for your bigram models:
+\begin{center}
+\hspace*{-69pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multicolumn{2}{|c|}{\multirow{2}{*}{$P(w_n|w_{n-1})$}} & \multicolumn{8}{|c|}{$w_n$} \\ 
+\cline{3-10}
+\multicolumn{2}{|c|}{} & \texttt{Alice} & \texttt{admired} & \texttt{Dorothy} & \texttt{every} & \texttt{dwarf} & \texttt{cheered} & \texttt{</S>} & \texttt{<UNK>} \\ 
+\hline 
+\multirow{8}{*}{$w_{n-1}$} & \texttt{<S>} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{Alice} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{admired} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{Dorothy} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{every} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{dwarf} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{cheered} & • & • & • & • & • & • & • & • \\ 
+\cline{2-10}
+& \texttt{<UNK>} & • & • & • & • & • & • & • & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\vspace{11pt}
+
+\item Note that both unigram and bigram models must account for $w_n$ being the stop symbol \texttt{</S>}. Additionally, bigram models must account for $w_{n-1}$ being the start symbol \texttt{<S>}. Include \texttt{<S>} and \texttt{</S>} in your counts just like any other token.
+
+\item Also note that both unigram and bigram models must account for the unknown word \texttt{<UNK>}. There are ways to train the probabilities of \texttt{<UNK>} from the training set, but for this assignment (and PA3/PA4), you can simply set all the \texttt{<UNK>}-related counts equal to 1. In other words, if you make a table of word counts, you can fill the \texttt{<UNK>} column (and row, if applicable) with 1's.
+
+\end{itemize}
+
+\item For each of the above language models, compute the probability of the following sentences:
+
+\texttt{Alice cheered}
+
+\texttt{Goldilocks cheered}
+
+\end{enumerate}\newpage
+
+\section{Hidden Markov Models}
+
+(You may find the discussion in Chapter A of the Jurafsky and Martin book helpful.)\\
+
+\noindent You are given the same short sentences as before, this time tagged with parts of speech:\\
+
+\texttt{Alice/NN admired/VB Dorothy/NN}
+
+\texttt{Dorothy/NN admired/VB every/DT dwarf/NN}
+
+\texttt{Dorothy/NN cheered/VB}
+
+\texttt{every/DT dwarf/NN cheered/VB}
+
+\begin{enumerate}
+
+\item Train a hidden Markov model on the above data. Specifically, compute the initial probability distribution $\pi$:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+\hline 
+$t_1$ & \texttt{NN} & \texttt{VB} & \texttt{DT} \\ 
+\hline 
+$P(t_1)$ & • & • & • \\ 
+\hline 
+\end{tabular}
+\end{center}
+
+\vspace{11pt}
+
+The transition matrix $A$:
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline 
+\multicolumn{2}{|c|}{\multirow{2}{*}{$P(t_n|t_{n-1})$}} & \multicolumn{3}{|c|}{$t_n$} \\ 
+\cline{3-5}
+\multicolumn{2}{|c|}{} & \texttt{NN} & \texttt{VB} & \texttt{DT} \\ 
+\hline 
+\multirow{3}{*}{$t_{n-1}$} & \texttt{NN} & • & • & • \\ 
+\cline{2-5}
+& \texttt{VB} & • & • & • \\ 
+\cline{2-5}
+& \texttt{DT} & • & • & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\vspace{11pt}
+
+And the emission matrix $B$:
+\begin{center}
+\hspace*{-22pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline 
+\multicolumn{2}{|c|}{\multirow{2}{*}{$P(w_n|t_n)$}} & \multicolumn{7}{|c|}{$w_n$} \\ 
+\cline{3-9}
+\multicolumn{2}{|c|}{} & \texttt{Alice} & \texttt{admired} & \texttt{Dorothy} & \texttt{every} & \texttt{dwarf} & \texttt{cheered} & \texttt{<UNK>} \\ 
+\hline 
+\multirow{3}{*}{$t_n$} & \texttt{NN} & • & • & • & • & • & • & • \\ 
+\cline{2-9}
+& \texttt{VB} & • & • & • & • & • & • & • \\ 
+\cline{2-9}
+& \texttt{DT} & • & • & • & • & • & • & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+Note that as before, you should account for the unknown word \texttt{<UNK>}, but you don't need to account for \texttt{<S>} or \texttt{</S>}. You should use add-1 smoothing on all three tables.\newpage
+
+\item Use the forward algorithm to compute the probability of the following sentence:
+
+\texttt{Alice cheered}
+
+In other words, fill in the forward trellis below:
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline 
+ & \texttt{Alice} & \texttt{cheered} \\ 
+\hline 
+\texttt{NN} & • & • \\ 
+\hline 
+\texttt{VB} & • & • \\ 
+\hline 
+\texttt{DT} & • & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\item Use the Viterbi algorithm to compute the best tag sequence for the following sentence:
+
+\texttt{Goldilocks cheered}
+
+Again, you should fill in the Viterbi trellis below. You should also keep track of backpointers, either using arrows or in a separate table.
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline 
+& \texttt{Goldilocks} & \texttt{cheered} \\ 
+\hline 
+\texttt{NN} & • & • \\ 
+\hline 
+\texttt{VB} & • & • \\ 
+\hline 
+\texttt{DT} & • & • \\ 
+\hline 
+\end{tabular} 
+\end{center}
+
+\end{enumerate}
+
+\section*{Submission Instructions}
+
+Please submit your solutions (in PDF format) to LATTE.
+
+\end{document}
