@@ -168,7 +168,7 @@ if __name__ == "__main__":
     trainFile = os.path.join( dataPath, results.trainFile )
     devFile = os.path.join( dataPath, results.devFile )
     testFile  = os.path.join( dataPath, results.testFile )
-    jumblePath   = os.path.join( dataPath, 'jumble-test' )
+    jumblePath   = os.path.join( dataPath, 'jumble-dev' )
 
     # load sentence data ..................................................
     print("Training data will be read from " + trainFile)
