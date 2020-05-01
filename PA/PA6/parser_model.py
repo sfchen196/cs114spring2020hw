@@ -14,7 +14,7 @@ import numpy as np
 
 def softmax(x):
     stable_x = np.exp(x - np.max(x))
-    y = stable_x / np.sum(stable_x, axis=0)
+    y = stable_x / np.sum(stable_x, axis=1)[:, None]
     return y
 
 def relu(x):
